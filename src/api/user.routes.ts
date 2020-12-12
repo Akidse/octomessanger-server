@@ -17,7 +17,7 @@ export default (app: Application) => {
     });
 
     app.post('/api/users/search', authenticateJWTMiddleware, async function(req, res) {
-        let users = await User.find({nickname: {'$regex': req.body.searchText}, _id: {$not: {$eq: (req as any).user.id}}});
+        let users = await User.find({nickname: {'$regex': req.body.searchText}, _id: {$not: {$eq: (req as any).user._id}}});
         return res.json({foundUsers: users});
     });
 }

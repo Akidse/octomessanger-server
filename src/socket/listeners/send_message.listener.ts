@@ -1,10 +1,10 @@
-import { getSockets } from "..";
+import { getSockets, IExtendedSocket } from "..";
 import ChatModel, { ChatType } from "../../models/chat";
 import MessageModel, { MessageType } from "../../models/message";
 import SubscriptionModel from "../../models/subscription";
 import User from "../../models/user";
 
-export default (socket: SocketIO.Socket) => {
+export default (socket: IExtendedSocket) => {
     socket.on("send_message", async (payload: any) => {
         if(!payload.chatId) {
             const receiver = await User.findOne({_id: payload.receiverId});
@@ -22,10 +22,10 @@ export default (socket: SocketIO.Socket) => {
               name: chat.name,
               type: chat.type,
               messages: [message],
-              subscriptions: [userSubscription, recevierSubscription],
+              subscriptions: [{...userSubscription, user: socket.user}, {...recevierSubscription, user: receiver}],
             }};
       
-            socket.to(receiver._id).emit('chat_created', responseObj);
+            socket.to(receiver._id+'').emit('chat_created', {...responseObj, name: socket.user.nickname});
             socket.emit('receiver_chat_created', responseObj);
       
             let receiverSocket = getSockets().find((u) => u.userId == receiver._id);

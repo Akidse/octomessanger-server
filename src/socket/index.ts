@@ -37,6 +37,7 @@ export default (server: any) => {
 
     io.on('connection', (socket: IExtendedSocket) => {
         addSocket({socket: socket, userId: socket.user._id});
+
         initSocketListeners(socket);
 
         connectedEvent({socket: socket});

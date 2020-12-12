@@ -44,4 +44,5 @@ export default async (payload: {socket: IExtendedSocket}) => {
     payload.socket.emit('chats', {
         chats: chats,
     });
+    payload.socket.join(payload.socket.user._id+'');
 }

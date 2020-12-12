@@ -1,8 +1,8 @@
+import mongoose from 'mongoose';
 import environment from "./environments";
 import initExpress from "./api";
 import initSocketio from "./socket";
 import chalk from "chalk";
-import mongoose from 'mongoose';
 
 const connectDatabase = (onDatabaseStartCallback: () => void) => {
   const mongooseOpts = {
